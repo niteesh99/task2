@@ -1,0 +1,119 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    
+    <link rel="stylesheet" href="task2.css">
+</head>
+<body style="margin:0%;" onload="onLoad()">
+    
+    <div class="right">
+        <div style="font-size: 50px;text-align: center;color: black;">Watsapp</div><hr/>
+        <div class="row">
+            <div class="column">
+                <a onclick="back()">CHAT</a>
+            </div>
+            <div class="column">
+                <a onclick="status()">STATUS</a>
+            </div>
+            <div class="column" >
+                <a onclick="calls()">CALLS</a>
+            </div>
+          </div>
+    </div>
+    <div id="dis">   
+        
+    </div>
+    <img id="backbtn" src="back.png" width="70" height="50" style="display: none;float: left;" onclick="back()"/>
+    
+    <div id="chats">
+    </div>
+   <div onclick="showElements()">
+        <img id="add" src="add.png" style="float: right;position: absolute;bottom:0%;right: 0%;cursor: pointer;" width="150" height="150" alt="">
+    </div >
+    </div> 
+</body>
+<script>
+    var list = [{content:`<img style="height: 80px;width: 80px;" src="chat.png" id="image"class="img"><p style="display: inline;">niteesh</p>`,display:true,chat:["hello","niteesh"]},
+{content:`<img style="height: 80px;width: 80px;" src="chat.png" id="image"class="img"><p style="display: inline;">sam</p>`,display:true,chat:["hello","sam"]}];""
+    function onLoad()
+    {
+        var ans = ``;
+        list.map((value,i) => {
+            ans += `<div id="${i}" class="user" style="display:${value.display ? 'block' : 'none'}" onclick="chat(${i})">${value.content}</div>`
+        })
+        document.getElementById("dis").innerHTML = ans
+    }
+    function showElements()
+    {
+        var person = prompt("Add contacts");
+        if(person == "")
+        {
+            alert("data required")
+        }
+        else{
+        var content = `
+                <img style="height: 80px;width: 80px;" src="chat.png" id="image"class="img">
+                <p style="display: inline;">${person}</p>`;
+        list.push({content:content,display:true,chat:[]});
+        var ans = loadData();
+        document.getElementById("dis").innerHTML = ans;
+        }
+
+    }
+    function status()
+   {
+        location.replace("status.html");
+   }
+   function calls ()
+   {
+        location.replace("calls.html");
+   }
+   function loadData(){
+    var ans = ``
+    list.map((value,i) => {
+        ans += `<div id="${i}" class="user" style="margin: 0%;display:${value.display}" onclick="chat(${i})">${value.content}</div>`
+    })
+    return ans;
+   }
+   function chat(i)
+   {
+        document.getElementById("add").style.display="none"
+        document.getElementById("backbtn").style.display="block";
+        document.getElementById("chats").style.display="block";
+        document.getElementById("dis").style.display="none"
+        var chats = ``
+        list[i].chat.map((value,j) => {
+            chats += `<button id="c${j}" class="dischat" onclick="delchat(${i},${j})">${value}</button><br><br>`
+        })
+        chats += `<input type="text" placeholder="Type here..." id="in"/><button id="send" onclick="addchat(${i})">Send</button>`
+        document.getElementById("chats").innerHTML = chats;
+   }
+   function delchat(j,i){
+       var chats =``
+        list[j].chat.splice(i,1);
+        list[j].chat.map((value,i) => {
+            chats += `<button id="c${j}" class="dischat" onclick="delchat(${j},${i})">${value}</button><br><br>`
+        })
+        chats += `<input type="text" placeholder="Type here..." id="in"/><button id="send" onclick="addchat(${i})">Send</button>`
+        document.getElementById("chats").innerHTML = chats;
+   }
+   function back(){
+    document.getElementById("add").style.display="block"
+       document.getElementById("chats").style.display="none";
+       document.getElementById("dis").style.display="block"
+       document.getElementById("backbtn").style.display="none"
+   }
+   function addchat(i)
+   {
+       var x = document.getElementById("in").value;
+       list[i].chat.push(x);
+       chat(i);
+   }
+</script>
+
+</html>
